@@ -24,3 +24,4 @@ run_simulations.maximize_growth_rate(model, media, simulation_savefile_name, sol
 - matplotlib
 - pandas
 - numpy
+- gurobi v8.1 or qminos
