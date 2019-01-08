@@ -15,9 +15,12 @@ this will use solve using gurobi v8.1 in low precision, to use qminos edit the s
 run_simulations.maximize_growth_rate(model, media, simulation_savefile_name, solver='qminos', precision=1e-12)
 ```
 
-## Versions
+## Dependencies
 - Python 3.6
 - COBRApy - v0.5.11
 - [COBRAme](https://github.com/SBRG/cobrame) - v0.0.9
 - [ECOLIme](https://github.com/SBRG/ecolime) - v0.0.9
 - [solvemepy](https://github.com/SBRG/solvemepy) - v1.0.1
+- matplotlib
+- pandas
+- numpy
