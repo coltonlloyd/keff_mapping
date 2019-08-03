@@ -37,7 +37,7 @@ def solve_model(me, precision=1e-2, solver='qminos',
         from qminospy.me1 import ME_NLP1
         me_nlp = ME_NLP1(me, growth_key='mu')
         me_nlp.compiled_expressions = compiled_expressions
-        x, status, hs = me_nlp.solvelp(.0001, )
+        x, status, hs = me_nlp.solvelp(.01)
 
         if status != 'optimal':
             print(status)
@@ -45,8 +45,7 @@ def solve_model(me, precision=1e-2, solver='qminos',
         print(me.solution.x_dict['biomass_dilution'])
 
         muopt, hs, xopt, cache = \
-            me_nlp.bisectmu(precision=precision, basis=hs,
-                            compiled_expressions=compiled_expressions)
+            me_nlp.bisectmu(precision=precision, basis=hs)
         me.solution.f = me.solution.x_dict['biomass_dilution']
 
     else:
@@ -73,6 +72,9 @@ def maximize_growth_rate(model, media, simulation_filename,
                       compiled_expressions=compiled_expressions)
 
     if not sol:
+        import pickle
+        with open('/home/sbrg-cjlloyd/Dropbox/%s_test.pickle' % media, 'wb') as f:
+            pickle.dump(model, f)
         print(simulation_filename, ' is infeasible')
         return
 

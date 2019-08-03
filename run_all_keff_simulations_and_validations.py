@@ -1,4 +1,5 @@
-import datetime
+import matplotlib
+matplotlib.use('Agg')
 import os
 from multiprocessing import Pool
 from os.path import dirname, abspath
@@ -21,17 +22,20 @@ media_dict = {'Glucose': 'EX_glc__D_e', 'Acetate': 'EX_ac_e',
               'Fructose': 'EX_fru_e', 'Glycerol + AA': '',
               'Galactose': 'EX_gal_e'}
 
-keff_vectors = ["experim_kappmax_NULL",
-                "experim_kcat_in_vitro_NULL",
-                "kappmax.ensemble_MTF-FBA",
-                "kcat.in.vitro.ensemble_MTF-FBA",
-                "OLD"]
+keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
+                'kappmax_davidi_per_pp_per_s_NULL_med',
+                'kappmax_KO_ALE_davidi_per_pp_per_s_repl',
+                'kappmax_KO_ALE_davidi_per_pp_per_s_NULL_med',
+                'kappmax_KO_ALE_per_pp_per_s_repl',
+                'kappmax_KO_ALE_per_pp_per_s_NULL_med',
+                'kcat_iv_ML_per_AS_per_s_repl',
+                'kcat_iv_ML_per_AS_per_s_NULL_med']
 root = dirname(abspath(__file__))
-name_suffix = 'keff_analysis'
+name_suffix = 'keff_analysis_new_new'
 if not name_suffix:
     name_suffix = datetime.datetime.now().strftime("%Y-%m-%d_at_%H:%M:%S")
 
-save_prefix = 'kappmax_kcat_in_vitro_lm_enet_rf_dl_iML_MTF-FBA_bm_norm_FALSE_use_Dans_kcats_TRUEuse_met_dG_KmTRUE_iv_sub'
+save_prefix = 'KO_MFA_Davidi_kappmax_w_ML_4x_cutoff'
 out_location = '%s/all_output_%s' % (root, name_suffix)
 batch_sims_save_loc = '%s/batch_simulations/%s/' % (out_location, save_prefix)
 validations_save_loc = '%s/validations/%s/' % (out_location, save_prefix)
@@ -45,7 +49,10 @@ os.makedirs(validations_save_loc, exist_ok=True)
 
 def set_keffs_media_and_solve(value):
     keff_column, media = value
-    model = load_json_me_model('iJL1678b.json')
+    #model = load_json_me_model('iJL1678b.json')
+    import pickle
+    with open('iJL1678b.pickle', 'rb') as f:
+        model = pickle.load(f)
     try:
         model.reactions.EX_glc_e.id = 'EX_glc__D_e'
         model.repair()
@@ -73,8 +80,16 @@ def set_keffs_media_and_solve(value):
             r.update()
     model.unmodeled_protein_fraction = 0
 
+    for r in model.reactions:
+        if isinstance(r, cobrame.MetabolicReaction) and hasattr(r, 'keff'):
+            if r.complex_data:
+                num_proteins = len(r.complex_data.stoichiometry.keys())
+                num_subunits = np.array(list(r.complex_data.stoichiometry.values())).sum()
+                r.keff += (r.keff * (num_subunits - num_proteins))
+                r.update()
+
     run_simulations.maximize_growth_rate(model, media,
-                                         simulation_savefile_name, solver='gurobi',
+                                         simulation_savefile_name, solver='qminos',
                                          precision=1e-12)
 
 
@@ -88,16 +103,19 @@ if __name__ == '__main__':
     submit_list = []
     for keff in keff_vectors:
         for media in media_dict:
+#            if media not in ['Glucose', 'Acetate']:
+#                continue
             submit_list.append([keff, media])
-
-    if run_simulations_flag:
-        run_pool(set_keffs_media_and_solve, submit_list, processes=1)
+            set_keffs_media_and_solve([keff, media])
+    #if run_simulations_flag:
+    #    run_pool(set_keffs_media_and_solve, submit_list, processes=1)
 
     model = load_json_me_model('iJL1678b.json')
 
     for keff in keff_vectors:
         for media in media_dict:
-
+ #           if media not in ['Glucose', 'Acetate']:
+ #               continue
             proteomics_data_path = \
                 '/'.join([proteomics_data_dir, 'Aebersold_copy_numbers.xlsx'])
             simulation_savefile_name = \
@@ -115,7 +133,8 @@ if __name__ == '__main__':
 
             proteomics_plotting.plot_pairwise_comparison(
                 dataframe, ['Measured', 'Simulated'],
-                '%s/plot_%s_%s.png' % (validations_save_loc, media, keff))
+                '%s/plot_%s_%s.png' % (validations_save_loc, media, keff),
+            only_metabolic=True, only_cytosolic=True)
 
     # ########## Process output for david ###########
     ijo = cobra.io.load_json_model('%s/iJO1366_bigg.json' % proteomics_data_dir)

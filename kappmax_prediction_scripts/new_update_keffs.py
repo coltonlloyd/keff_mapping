@@ -289,6 +289,8 @@ def map_m_id_to_me(me, orig_r, keff):
                            'THRt2rpp', 'VALt2rpp']:
                     rxn.keff = keff
                     rxn.update()
+                elif '_REV_' in rxn.id and not r.endswith('_b'):
+                    pass
 
                 else:
                     print(rxn, r, rxn.reaction)
