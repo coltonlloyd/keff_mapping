@@ -30,8 +30,9 @@ keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
                 'kappmax_KO_ALE_per_pp_per_s_NULL_med',
                 'kcat_iv_ML_per_AS_per_s_repl',
                 'kcat_iv_ML_per_AS_per_s_NULL_med']
+keff_vectors = ['kappmax_KO_ALE_davidi_per_pp_per_s_repl']
 root = dirname(abspath(__file__))
-name_suffix = 'keff_analysis_new_new'
+name_suffix = 'keff_analysis_proteomics_ml'
 if not name_suffix:
     name_suffix = datetime.datetime.now().strftime("%Y-%m-%d_at_%H:%M:%S")
 
@@ -85,9 +86,12 @@ def set_keffs_media_and_solve(value):
             if r.complex_data:
                 num_proteins = len(r.complex_data.stoichiometry.keys())
                 num_subunits = np.array(list(r.complex_data.stoichiometry.values())).sum()
-                r.keff += (r.keff * (num_subunits - num_proteins))
+                r.keff = (r.keff * (num_subunits / num_proteins))
                 r.update()
 
+    with open('iJL1678b_ML_KO_keff.pickle', 'wb') as f:
+        pickle.dump(model, f)
+    save_json_me_model(model, 'iJL1678b_ML_KO_keff.json')
     run_simulations.maximize_growth_rate(model, media,
                                          simulation_savefile_name, solver='qminos',
                                          precision=1e-12)
