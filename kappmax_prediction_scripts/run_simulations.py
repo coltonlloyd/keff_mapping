@@ -72,9 +72,6 @@ def maximize_growth_rate(model, media, simulation_filename,
                       compiled_expressions=compiled_expressions)
 
     if not sol:
-        import pickle
-        with open('/home/sbrg-cjlloyd/Dropbox/%s_test.pickle' % media, 'wb') as f:
-            pickle.dump(model, f)
         print(simulation_filename, ' is infeasible')
         return
 
