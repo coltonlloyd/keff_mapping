@@ -1,4 +1,5 @@
 import matplotlib
+import datetime
 matplotlib.use('Agg')
 import os
 from multiprocessing import Pool
@@ -50,10 +51,8 @@ os.makedirs(validations_save_loc, exist_ok=True)
 
 def set_keffs_media_and_solve(value):
     keff_column, media = value
-    #model = load_json_me_model('iJL1678b.json')
-    import pickle
-    with open('iJL1678b.pickle', 'rb') as f:
-        model = pickle.load(f)
+    model = load_json_me_model('iJL1678b.json')
+
     try:
         model.reactions.EX_glc_e.id = 'EX_glc__D_e'
         model.repair()
