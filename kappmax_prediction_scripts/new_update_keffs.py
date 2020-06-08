@@ -456,5 +456,4 @@ def update_all_keffs(me, keff_series, objective_rxn='ATPM',
     #    r.update()
     #    print(r.id, r.keff)
     me.update()
-    out_df.to_csv('/home/sbrg-cjlloyd/Desktop/test.csv')
     print('DONE')

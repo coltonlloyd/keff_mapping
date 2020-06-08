@@ -6,7 +6,7 @@ import pickle
 import numpy as np
 import json
 
-from me_validation_resources.media import set_media
+from kappmax_prediction_scripts.media import set_media
 from cobrame.solve.algorithms import binary_search, compile_expressions
 
 

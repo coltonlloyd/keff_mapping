@@ -13,7 +13,7 @@ import pickle
 import pandas as pd
 from cobrame.io.json import load_json_me_model, save_json_me_model
 
-from kappmax_prediction_scripts import new_update_keffs, run_simulations, compare_with_proteomics, proteomics_plotting
+from kappmax_prediction_scripts import new_update_keffs, run_simulations, compare_with_proteomics
 
 media_dict = {'Glucose': 'EX_glc__D_e', 'Acetate': 'EX_ac_e',
               'Pyruvate': 'EX_pyr_e', 'Glycerol': 'EX_glyc_e',
@@ -23,14 +23,14 @@ media_dict = {'Glucose': 'EX_glc__D_e', 'Acetate': 'EX_ac_e',
               'Fructose': 'EX_fru_e', 'Glycerol + AA': '',
               'Galactose': 'EX_gal_e'}
 
-keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
-                'kappmax_davidi_per_pp_per_s_NULL_med',
-                'kappmax_KO_ALE_davidi_per_pp_per_s_repl',
-                'kappmax_KO_ALE_davidi_per_pp_per_s_NULL_med',
-                'kappmax_KO_ALE_per_pp_per_s_repl',
-                'kappmax_KO_ALE_per_pp_per_s_NULL_med',
-                'kcat_iv_ML_per_AS_per_s_repl',
-                'kcat_iv_ML_per_AS_per_s_NULL_med']
+#keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
+#                'kappmax_davidi_per_pp_per_s_NULL_med',
+#                'kappmax_KO_ALE_davidi_per_pp_per_s_repl',
+#                'kappmax_KO_ALE_davidi_per_pp_per_s_NULL_med',
+#                'kappmax_KO_ALE_per_pp_per_s_repl',
+#                'kappmax_KO_ALE_per_pp_per_s_NULL_med',
+#                'kcat_iv_ML_per_AS_per_s_repl',
+#                'kcat_iv_ML_per_AS_per_s_NULL_med']
 keff_vectors = ['kappmax_KO_ALE_davidi_per_pp_per_s_repl']
 root = dirname(abspath(__file__))
 name_suffix = 'keff_analysis_proteomics_ml'
@@ -131,13 +131,8 @@ if __name__ == '__main__':
             dataframe.to_csv('%s/spreadsheet_%s_%s.csv' % (validations_save_loc, media, keff))
 
             compare_with_proteomics.transform_df_to_mass_or_mol_fraction(
-                dataframe, model, ['Measured',
-                                   'Simulated'])
-
-            proteomics_plotting.plot_pairwise_comparison(
-                dataframe, ['Measured', 'Simulated'],
-                '%s/plot_%s_%s.png' % (validations_save_loc, media, keff),
-            only_metabolic=True, only_cytosolic=True)
+                   dataframe, model, ['Measured',
+                                      'Simulated'])
 
     # ########## Process output for david ###########
     ijo = cobra.io.load_json_model('%s/iJO1366_bigg.json' % proteomics_data_dir)
