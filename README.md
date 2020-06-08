@@ -12,11 +12,13 @@ To run the relevant simulations and validations clone the repository and run:
 python run_all_keff_simulations_and_validations.py
 ```
 
-this will use solve using gurobi v8.1 in low precision, to use qminos edit the solver argument in `maximize_growth_rate` in `run_all_simulations_and_validations.py` to:
+this will use solve using qminos in quad precision, to use gurobi v8.1 in low precision edit the solver argument in `maximize_growth_rate` in `run_all_simulations_and_validations.py` to:
 
 ```python
-run_simulations.maximize_growth_rate(model, media, simulation_savefile_name, solver='qminos', precision=1e-12)
+run_simulations.maximize_growth_rate(model, media, simulation_savefile_name, solver='gurobi', precision=1e-12)
 ```
+
+The simulations from `run_all_keff_simulations_and_validations.py` are output as `simulation_validation_output.csv`
 
 ## Dependencies
 - Python 3.6
