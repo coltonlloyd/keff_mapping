@@ -23,15 +23,15 @@ media_dict = {'Glucose': 'EX_glc__D_e', 'Acetate': 'EX_ac_e',
               'Fructose': 'EX_fru_e', 'Glycerol + AA': '',
               'Galactose': 'EX_gal_e'}
 
-#keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
-#                'kappmax_davidi_per_pp_per_s_NULL_med',
-#                'kappmax_KO_ALE_davidi_per_pp_per_s_repl',
-#                'kappmax_KO_ALE_davidi_per_pp_per_s_NULL_med',
-#                'kappmax_KO_ALE_per_pp_per_s_repl',
-#                'kappmax_KO_ALE_per_pp_per_s_NULL_med',
-#                'kcat_iv_ML_per_AS_per_s_repl',
-#                'kcat_iv_ML_per_AS_per_s_NULL_med']
-keff_vectors = ['kappmax_KO_ALE_davidi_per_pp_per_s_repl']
+keff_vectors = ['kappmax_davidi_per_pp_per_s_repl',
+                'kappmax_davidi_per_pp_per_s_NULL_med',
+                'kappmax_KO_ALE_davidi_per_pp_per_s_repl',
+                'kappmax_KO_ALE_davidi_per_pp_per_s_NULL_med',
+                'kappmax_KO_ALE_per_pp_per_s_repl',
+                'kappmax_KO_ALE_per_pp_per_s_NULL_med',
+                'kcat_iv_ML_per_AS_per_s_repl',
+                'kcat_iv_ML_per_AS_per_s_NULL_med']
+#keff_vectors = ['kappmax_KO_ALE_davidi_per_pp_per_s_repl']
 root = dirname(abspath(__file__))
 name_suffix = 'keff_analysis_proteomics_ml'
 if not name_suffix:
