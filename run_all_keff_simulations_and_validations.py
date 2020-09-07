@@ -74,7 +74,8 @@ def set_keffs_media_and_solve(value):
     model.unmodeled_protein_fraction = 0
 
     run_simulations.maximize_growth_rate(model, media,
-                                         simulation_savefile_name, solver='gurobi',
+                                         simulation_savefile_name,
+                                         solver='gurobi',
                                          precision=1e-12)
 
 
