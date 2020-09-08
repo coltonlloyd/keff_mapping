@@ -11,7 +11,7 @@ import pickle
 import pandas as pd
 from cobrame.io.json import load_json_me_model, save_json_me_model
 
-from kappmax_prediction_scripts import new_update_keffs, run_simulations, compare_with_proteomics, proteomics_plotting
+from kappmax_prediction_scripts import new_update_keffs, run_simulations, compare_with_proteomics
 
 media_dict = {'Glucose': 'EX_glc__D_e', 'Acetate': 'EX_ac_e',
               'Pyruvate': 'EX_pyr_e', 'Glycerol': 'EX_glyc_e',
@@ -114,9 +114,6 @@ if __name__ == '__main__':
                 dataframe, model, ['Measured',
                                    'Simulated'])
 
-            proteomics_plotting.plot_pairwise_comparison(
-                dataframe, ['Measured', 'Simulated'],
-                '%s/plot_%s_%s.png' % (validations_save_loc, media, keff))
 
     # ########## Process output for david ###########
     ijo = cobra.io.load_json_model('%s/iJO1366_bigg.json' % proteomics_data_dir)

@@ -16,11 +16,14 @@ from validations.proteomics.proteomics_helper_functions import \
     get_membrane_transport_genes, get_rna_modfication_genes, \
     get_sum_of_metabolic_fluxes_of_gene
 
-import me_validation_resources
+import kappmax_prediction_scripts
 
-resource_dir = dirname(abspath(me_validation_resources.__file__))
 
-ijo = cobra.io.load_json_model('%s/iJO1366.json' % resource_dir)
+scripts_dir = dirname(abspath(kappmax_prediction_scripts.__file__))
+home_dir = dirname(scripts_dir)
+resource_dir = home_dir + '/data/'
+ijo = cobra.io.load_json_model('%s/iJO1366.json' % scripts_dir)
+
 
 with open('/'.join([resource_dir, 'gene_name_to_bnum.json']), 'r') as f:
     bnum_to_gene = json.load(f)
@@ -44,7 +47,7 @@ def get_sim_raw_df(model, sim_filename):
 
 
 def get_old_sim_raw_df(model, media, old_me_sims_filename):
-    media = me_validation_resources.media.map_media_to_old_me_df[media]
+    media = kappmax_prediction_scripts.media.map_media_to_old_me_df[media]
 
     old_sim_df = pd.read_pickle(old_me_sims_filename)
     sim_df_filtered = old_sim_df[media]
