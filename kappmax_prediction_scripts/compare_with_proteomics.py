@@ -11,7 +11,7 @@ from six import string_types
 
 import cobra
 
-from validations.proteomics.proteomics_helper_functions import \
+from kappmax_prediction_scripts.proteomics_helper_functions import \
     get_all_protein_localizations, get_metabolic_reactions_from_gene, \
     get_membrane_transport_genes, get_rna_modfication_genes, \
     get_sum_of_metabolic_fluxes_of_gene
